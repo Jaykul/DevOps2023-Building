@@ -1,4 +1,4 @@
-Add-BuildTask Test @{
+Add-BuildTask DotNetTest @{
     # This task should be skipped if there are no C# projects to build
     If      = $dotnetTestProjects
     Inputs  = {
@@ -8,13 +8,12 @@ Add-BuildTask Test @{
     Outputs = {
         (Get-ChildItem $TestResultsDirectory -Filter *.trx -Recurse -ErrorAction Ignore) ?? $TestResultsDirectory
     }
-    Jobs    = "Compile", {
+    Jobs    = "DotNetBuild", {
         # make sure the coverage tool is available
         dotnet tool update --global dotnet-coverage
 
         $local:options = @{
             "-configuration" = $configuration
-            # "-output" = $OutputBin
             "-results-directory" = $TestResultsDirectory
         } + $script:dotnetOptions
 
@@ -23,7 +22,7 @@ Add-BuildTask Test @{
         }
 
         foreach ($project in $dotnetTestProjects) {
-            Write-Build Gray "dotnet build $project --no-build --logger trx" @options
+            Write-Build Gray "dotnet test $project --no-build --logger trx" @options
             dotnet test $project --no-build --logger trx @options
         }
     }

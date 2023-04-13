@@ -1,10 +1,17 @@
+[CmdletBinding()]
+param(
+    [switch]$DotNetTasks,
+    [switch]$NoTasks
+)
 Write-Information "Initializing build variables"
 # BuildRoot is provided by Invoke-Build
 Write-Information "  BuildRoot: $BuildRoot"
 
 # NOTE: this variable is currently also used for Pester formatting ...
 # So we must use either "AzureDevOps", "GithubActions", or "None"
-$script:BuildSystem = if (Test-Path Env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI) {
+$script:BuildSystem = if (Test-Path ENV:GITHUB_ACTIONS) {
+    "GithubActions"
+} elseif (Test-Path Env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI) {
     "AzureDevops"
 } else {
     "None"
@@ -33,46 +40,44 @@ ${script:\} = ${script:/} = [IO.Path]::DirectorySeparatorChar
 #>
 
 # There are a few different environment/variables it could be, and then our fallback
-$Script:OutputDirectory = @(Get-Content Env:BUILD_BINARIESDIRECTORY, Variable:OutputDirectory -ErrorAction Ignore) +
-                          @(Join-Path -Path $BuildRoot -ChildPath 'Output') | Select-Object -First 1
+$Script:OutputDirectory = $script:OutputDirectory ??
+                          $Env:BUILD_BINARIESDIRECTORY ?? # Azure
+                          (Join-Path -Path $BuildRoot -ChildPath 'output')
 New-Item -Type Directory -Path $OutputDirectory -Force | Out-Null
 Write-Information "  OutputDirectory: $OutputDirectory"
 
-$Script:TestResultsDirectory = @(Get-Content Env:COMMON_TESTRESULTSDIRECTORY, Env:TEST_RESULTS_DIRECTORY, Variable:TestResultsDirectory -ErrorAction Ignore) +
-                               @(Join-Path -Path $OutputDirectory -ChildPath 'TestResults') | Select-Object -First 1
+$Script:TestResultsDirectory = $script:TestResultsDirectory ??
+                               $Env:COMMON_TESTRESULTSDIRECTORY ?? # Azure
+                               $Env:TEST_RESULTS_DIRECTORY ??
+                               (Join-Path -Path $OutputDirectory -ChildPath 'tests')
 New-Item -Type Directory -Path $TestResultsDirectory -Force | Out-Null
 Write-Information "  TestResultsDirectory: $TestResultsDirectory"
 
 ### IMPORTANT: Our local TempDirectory does not cleaned the way the Azure one does
-$Script:TempDirectory = @(Get-Content Env:AGENT_TEMPDIRECTORY -ErrorAction Ignore).Where({ Test-Path $_ })
-if (!$Script:TempDirectory) {
-    $Script:TempDirectory = @(Get-Content Env:TEMP, Env:TMP -ErrorAction Ignore).Where{ Test-Path $_ }[0] |
-        Join-Path -ChildPath 'InvokeBuild'
-}
+$Script:TempDirectory = $script:TempDirectory ??
+                        $Env:RUNNER_TEMP ?? # Github
+                        $Env:AGENT_TEMPDIRECTORY ?? # Azure
+                        (Join-Path ($Env:TEMP ?? $Env:TMP ?? "$BuildRoot/Tmp_$(Get-Date -f yyyyMMddThhmmss)") -ChildPath 'InvokeBuild')
 New-Item -Type Directory -Path $TempDirectory -Force | Out-Null
 Write-Information "  TempDirectory: $TempDirectory"
 
 # Git variables that we could probably use:
-$Script:GITSHA = if ($ENV:BUILD.SOURCEVERSION) {
-    $ENV:BUILD.SOURCEVERSION
-} else {
-    git rev-parse HEAD
+$Script:GitSha = $script:GitSha ?? $ENV:GITHUB_SHA ?? $ENV:BUILD_SOURCEVERSION
+if (!$Script:GitSha) {
+    $Script:GitSha = git rev-parse HEAD
 }
-Write-Information "  GITSHA: $Script:GITSHA"
+Write-Information "  GitSha: $Script:GitSha"
 
-$script:BranchName = if ($Env:BUILD_SOURCEBRANCHNAME) {
-    $Env:BUILD_SOURCEBRANCHNAME
-} elseif (Get-Command git -CommandType Application) {
-    (git branch --show-current) -replace ".*/"
+$script:BranchName = $script:BranchName ?? $Env:BUILD_SOURCEBRANCHNAME
+if (!$script:BranchName -and (Get-Command git -CommandType Application -ErrorAction Ignore)) {
+    $script:BranchName = (git branch --show-current) -replace ".*/"
 }
 Write-Information "  BranchName: $script:BranchName"
 
-if (Get-ChildItem -Path $BuildRoot -Include *.*proj -Recurse) {
+if ($DotNetTasks) {
     Write-Information "Initializing DotNet build variables"
-    # The OutputBin is the bin folder within the OutputDirectory (used for dotnet build output)
-    $script:OutputBin = New-Item (Join-Path $script:OutputDirectory bin) -ItemType Directory -Force -ErrorAction SilentlyContinue | Convert-Path
-    # The OutputPub is the pub folder within the OutputDirectory (used for dotnet publish output)
-    $script:OutputPub = New-Item (Join-Path $script:OutputDirectory pub) -ItemType Directory -Force -ErrorAction SilentlyContinue | Convert-Path
+    # The PublishDirectory is the pub folder within the OutputDirectory (used for dotnet publish output)
+    $script:PublishDirectory = New-Item (Join-Path $script:OutputDirectory publish) -ItemType Directory -Force -ErrorAction SilentlyContinue | Convert-Path
 
     # Default values for build variables:
     # Dotnet build configuration
@@ -86,7 +91,10 @@ if (Get-ChildItem -Path $BuildRoot -Include *.*proj -Recurse) {
         if (!$dotnetProjects) {
             Get-ChildItem -Path $BuildRoot -Include *.*proj -Recurse | Split-Path
         } elseif (![IO.Path]::IsPathRooted(@($dotnetProjects)[0])) {
-            Get-ChildItem -Path $BuildRoot -Include *.*proj -Recurse | Where-Object { $dotnetProjects -contains $_.BaseName } | Split-Path
+            Get-ChildItem -Path $BuildRoot -Include *.*proj -Recurse |
+                Where-Object { $dotnetProjects -contains $_.BaseName } | Split-Path
+        } else {
+            $dotnetProjects
         }
     ) | Convert-Path
     Write-Information "  DotNetProjects: $($script:dotnetProjects -join ", ")"
@@ -95,7 +103,10 @@ if (Get-ChildItem -Path $BuildRoot -Include *.*proj -Recurse) {
         if (!$dotnetTestProjects) {
             Get-ChildItem -Path $BuildRoot -Include *Test.*proj -Recurse | Split-Path
         } elseif (![IO.Path]::IsPathRooted(@($dotnetTestProjects)[0])) {
-            Get-ChildItem -Path $BuildRoot -Include *Test.*proj -Recurse | Where-Object { $dotnetProjects -contains $_.BaseName } | Split-Path
+            Get-ChildItem -Path $BuildRoot -Include *Test.*proj -Recurse |
+                Where-Object { $dotnetTestProjects -contains $_.BaseName } | Split-Path
+        } else {
+            $dotnetTestProjects
         }
     )  | Convert-Path
     Write-Information "  DotNetTestProjects: $($script:dotnetTestProjects -join ", ")"
@@ -103,10 +114,12 @@ if (Get-ChildItem -Path $BuildRoot -Include *.*proj -Recurse) {
     $script:dotnetOptions ??= @{}
 }
 
-
 # Finally, import all the Task.ps1 files in this folder
-Write-Information "Import Shared Tasks"
-foreach ($taskfile in Get-ChildItem -Path $PSScriptRoot -Filter *.Task.ps1) {
-    Write-Information "    $($taskfile.FullName)"
-    . $taskfile.FullName
+if (!$NoTasks) {
+    Write-Information "Import Shared Tasks"
+    foreach ($taskfile in Get-ChildItem -Path $PSScriptRoot -Filter *.Task.ps1) {
+        if (!$DotNetTasks -and $taskfile.Name -match "^DotNet") { continue }
+        Write-Information "    $($taskfile.FullName)"
+        . $taskfile.FullName
+    }
 }

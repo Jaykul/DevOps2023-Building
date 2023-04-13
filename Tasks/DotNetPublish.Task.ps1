@@ -1,4 +1,4 @@
-Add-BuildTask Publish @{
+Add-BuildTask DotNetPublish @{
     # This task should be skipped if there are no C# projects to build
     If      = $dotnetProjects
     Inputs  = {
@@ -8,9 +8,9 @@ Add-BuildTask Publish @{
     }
     Outputs = {
         Split-Path $dotnetProjects -Leaf |
-            Join-Path -Path { "$OutputBin${/}$_" } -ChildPath { "$_.dll" }
+            Join-Path -Path { "$PublishDirectory${/}$_" } -ChildPath { "$_.dll" }
     }
-    Jobs    = "Compile", {
+    Jobs    = "DotNetBuild", {
         $local:options = @{} + $script:dotnetOptions
 
         # We never do self-contained builds
@@ -24,8 +24,9 @@ Add-BuildTask Publish @{
                 $options["p"] = "Version=$((Get-Variable "GitVersion.$((Split-Path $project -Leaf).ToLower())" -ValueOnly).InformationalVersion)"
             }
 
-            Write-Build Gray "dotnet publish $project --configuration $configuration --output $OutputBin -p $($options["p"])"
-            dotnet publish --output "$OutputBin${/}$Name" --no-build --configuration $configuration
+            Set-Location $project
+            Write-Build Gray "dotnet publish --output $PublishDirectory${/}$Name --no-build --configuration $configuration -p $($options["p"])"
+            dotnet publish --output "$PublishDirectory${/}$Name" --no-build --configuration $configuration
         }
     }
 }

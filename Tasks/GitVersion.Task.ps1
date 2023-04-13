@@ -1,4 +1,4 @@
-Add-BuildTask Version @{
+Add-BuildTask GitVersion @{
     # This task should be skipped if there are no C# projects to build
     If      = $dotnetProjects
     Inputs  = {
@@ -14,9 +14,9 @@ Add-BuildTask Version @{
             # In the build system, run it ONCE PER BUILD (use a $TempDirectory the build cleans)
             if ($dotnetProjects.Count -gt 1) {
                 (Split-Path $dotnetProjects -Leaf).ToLower() |
-                    Join-Path -Path $TempDirectory -ChildPath { "${_}-v$GITSHA.json" }
+                    Join-Path -Path $TempDirectory -ChildPath { "${_}-v$GitSha.json" }
             } else {
-                Join-Path -Path $TempDirectory -ChildPath "v$GITSHA.json"
+                Join-Path -Path $TempDirectory -ChildPath "v$GitSha.json"
             }
         }
     }
@@ -67,7 +67,7 @@ Add-BuildTask Version @{
                 Convert-Path "$PSScriptRoot/Version.yml"
             }
 
-            $VersionFile = Join-Path $TempDirectory -ChildPath "$TagPrefix$GITSHA.json"
+            $VersionFile = Join-Path $TempDirectory -ChildPath "$TagPrefix$GitSha.json"
 
             if (Test-Path $VersionFile) {
                 Remove-Item $VersionFile

@@ -1,4 +1,4 @@
-Add-BuildTask Compile @{
+Add-BuildTask DotNetBuild @{
     # This task should be skipped if there are no C# projects to build
     If      = $dotnetProjects
     Inputs  = {
@@ -12,7 +12,7 @@ Add-BuildTask Compile @{
             (Get-ChildItem $project/bin -Filter "$BaseName.dll" -Recurse -ErrorAction Ignore) ?? $BuildRoot
         }
     }
-    Jobs    = "Restore", "Version", {
+    Jobs    = "DotNetRestore", "GitVersion", {
         $local:options = @{} + $script:dotnetOptions
 
         # We never do self-contained builds

@@ -1,0 +1,10 @@
+
+default: true
+MD003:
+  style: "atx"
+MD025: false
+MD013: false
+MD033: false
+MD007:
+  indent: 4
+no-hard-tabs: false

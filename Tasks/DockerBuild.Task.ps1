@@ -1,4 +1,4 @@
-Add-BuildTask Docker @{
+Add-BuildTask DockerBuild @{
     # This task can only be skipped if the images are newer than the source files
     If      = $dotnetProjects
     Inputs  = {
@@ -12,9 +12,10 @@ Add-BuildTask Docker @{
     }
     Jobs    = {
         foreach ($project in $dotnetProjects.Where{ Get-ChildItem $_ -File -Filter Dockerfile }) {
-            Write-Build Gray "dotnet restore $project" @options
             Set-Location $project
             $name = (Split-Path $project -Leaf).ToLower()
+
+            Write-Build Gray "docker build . --tag $name --iidfile $(Join-Path $Output $name)"
             docker build . --tag $name --iidfile (Join-Path $Output $name)
         }
     }

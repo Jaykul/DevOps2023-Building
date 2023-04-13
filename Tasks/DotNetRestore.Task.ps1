@@ -1,4 +1,4 @@
-Add-BuildTask Restore @{
+Add-BuildTask DotNetRestore @{
     # This task should be skipped if there are no C# projects to build
     If      = $dotnetProjects
     Inputs  = {
