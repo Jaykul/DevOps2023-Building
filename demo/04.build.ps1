@@ -39,10 +39,10 @@ if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
 
 ## The first task defined is the default task
 if ($Clean) {
-    Add-BuildTask . Clean, Restore, Compile, Test, Publish
+    Add-BuildTask . Clean, DotNetRestore, DotNetBuild, DotNetTest, DotNetPublish
 } else {
-    Add-BuildTask . Restore, Compile, Test, Publish
+    Add-BuildTask . DotNetRestore, DotNetBuild, DotNetTest, DotNetPublish
 }
 
-## Initialize the build variables, and import shared tasks
-. "$Tasks/_Initialize.ps1"
+## Initialize the build variables, and import shared tasks, including DotNet tasks
+. "$Tasks/_Initialize.ps1" -DotNet
