@@ -2,7 +2,7 @@
 theme: white
 highlightTheme: nnfx-light # foundation  # school-book #
 transition: convex
-defaultTiming: 100
+hashOneBasedIndex: true
 controls: true
 controlsLayout: edges
 progress: true
@@ -13,11 +13,10 @@ title: "#PSHSummit"
 
 # Invoke-Build {.r-fit-text}
 ## PowerShell in CI/CD
-Building, Testing, and Deploying
+### Building, Testing, and Deploying
 
 Joel "Jaykul" Bennett
 
-PowerShell + DevOps Global Summit 2023
 https://github.com/Jaykul/DevOps2023
 
 note: Welcome to my talk on Invoke-Build and using PowerShell in CI/CD -- I am Joel Bennett, also known as Jaykul, and today I'm not here to talk about one of my side-projects, but instead to talk about what I spend too much time on **at work**: building, testing, and deploying software ... and trying to make sure our builds "just work" as often as possible.
@@ -28,10 +27,10 @@ note: Welcome to my talk on Invoke-Build and using PowerShell in CI/CD -- I am J
 # About Me
 
 - Joel "Jaykul" Bennett
-- Principal DevOps Engineer - loanDepot
-- https://discord.gg/PowerShell
-- https://fosstodon.org/@jaykul (and [Twitter](https://twitter.com/Jaykul))
-- https://github.com/Jaykul (also [PoshCode](https://github.com/PoshCode))
+- Principal DevOps Engineer @ loanDepot
+- [PoshCode.org](https://PoshCode.org): [/discord](https://discord.gg/PowerShell), [/slack](https://poshcode.org/slack), [/irc](https://poshcode.org/irc)
+- [fosstodon.org/@jaykul](https://fosstodon.org/@jaykul) (and [Twitter](https://twitter.com/Jaykul))
+- [github.com/Jaykul](https://github.com/Jaykul) (also [PoshCode](https://github.com/PoshCode))
 
 note: In case you don't know who I am, here's a little bit about me. I'm Joel Bennett, I'm from upstate New York by way of the grasslands of Guanacaste, Costa Rica. I have been "Jaykul" (pronounced J. Cool) online since the 1990s, and I'm currently the Principal DevOps Engineer at loanDepot! Let's see, what else... I am Bilingual, I am Battle Faction, I am blessed. I use He/Him pronouns. I am a 14 time Microsoft MVP, a Christian, an open source programmer, a ... really helpful guy. You can find me on Discord, Mastodon, and Twitter (sometimes), as well as GitHub, and I'm always happy to talk about PowerShell, Programming, DevOps, silly origin stories, etc.<br/> But TODAY, I want to talk about CI/CD automation.
 
