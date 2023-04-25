@@ -20,7 +20,7 @@ if ($Dotnet) {
         if ($Force -or $PSCmdlet.ShouldContinue("Attempt to install dotnet 7.0?")) {
             if (!$IsLinux -and !$IsMacOS) {
                 Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile bootstrap-dotnet-install.ps1
-                .\bootstrap-dotnet-install.ps1 -Channel 7.0 -InstallDir $Env:USERPROFILE\.dotnet
+                .\bootstrap-dotnet-install.ps1 -Channel 7.0 -InstallDir $HOME\.dotnet
             } else {
                 Invoke-WebRequest https://dot.net/v1/dotnet-install.sh -OutFile bootstrap-dotnet-install.sh
                 chmod +x bootstrap-dotnet-install.sh
