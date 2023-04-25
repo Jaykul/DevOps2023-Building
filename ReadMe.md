@@ -1,6 +1,6 @@
 ---
-theme: white
-highlightTheme: nnfx-light # foundation  # school-book #
+theme: simple
+highlightTheme: nnfx-dark # nnfx-light # foundation  # school-book #
 transition: convex
 hashOneBasedIndex: true
 controls: true
@@ -65,7 +65,7 @@ A fast loop is critical for productivity.
 
 Skip what's already done.
 
-note: So let's start at the edge. In this case we're talking about the place where the code gets written. Whether that's a laptop, a beefy workstation, or a cloud-hosted devcontainer. The bottom line is that you need to be able to quickly rebuild and test your code **locally** on the environment where you're authoring it.
+note: So let's start at the edge. In this case we're talking about the place where the code gets written. Whether that's a laptop, a beefy workstation, or a cloud-hosted dev container. The bottom line is that you need to be able to quickly rebuild and test your code **locally** on the environment where you're authoring it.
 
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
 ---
@@ -109,7 +109,7 @@ Despite all that, we're talking about Invoke-Build because ...
 
 [nightroman/invoke-build](https://github.com/nightroman/Invoke-Build) { style="font-size: 1.5em;" }
 
-- **Incremental**: occuring over a series of gradual steps
+- **Incremental**: occurring over a series of gradual steps
 - **Task Tree**: recursive dependency graph
 - **Checkpoint**: save state and resume later
 - **File System**: Build root, inputs, and outputs
@@ -119,9 +119,9 @@ note: ... it's very good at what it does. You can specify **incremental** tasks 
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" data-auto-animate  -->
 ---
 
-# SEE CODE
-# SEE CODE RUN
-# RUN, CODE, RUN
+# SEE CODE {.r-fit-text}
+# SEE CODE RUN {.r-fit-text}
+# RUN, CODE, RUN {.r-fit-text}
 
 note: This is obviously a play on the kids books, but I wrote it because of the core truth: Our work pattern, as developers is "Code, Run, Code, Run." The sooner you can see the results of running your code, the sooner you begin to iterate, and the faster you can get it right. So let's look at some Invoke-Build code. Maybe we'll come back to more slides later, but I'm not promising anything.
 
@@ -138,7 +138,7 @@ which runs both `restore` and `build` in this case.
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
 --
 
-# SEE CODE RUN
+# SEE CODE RUN {.r-fit-text}
 
 
 ```ps1 {data-line-numbers="1|2|7|11|1-11"}
@@ -167,7 +167,7 @@ remove -- remove-item -recurse without failing when they don't exist
 --
 
 
-# RUN, CODE, RUN
+# RUN, CODE, RUN {.r-fit-text}
 
 
 ```ps1 {data-line-numbers="1-8,10|15-23|25-27"}
@@ -211,19 +211,19 @@ Add-BuildTask . restore, build
 ```
 
 note: We document with comments
-We make our build script directly invokable
+We make our build script directly invocable
 We expand aliases for maintainability (PSScriptAnalyzer)
 
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
 --
 
-# RUN CODE LESS
+# RUN CODE LESS {.r-fit-text}
 
-## Incremental Builds
+## Incremental Builds {.r-fit-text}
 
 note: If you run that build twice, it will restore and build twice.
 Make each task incremental, so we skip steps that have already run.
-Switch to the hashtable syntax and provide inputs and outputs
+Switch to the hash table syntax and provide inputs and outputs
 
 ```ps1
 Add-BuildTask DotNetBuild @{
@@ -253,7 +253,7 @@ Add-BuildTask DotNetBuild @{
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
 ---
 
-## Always start with a [README](README.md)
+## Start with a [README](README.md)
 
 It's where the next person will look for instructions
 
@@ -269,7 +269,7 @@ Make sure you update it whenever you change the dependencies, update the framewo
 
 --
 
-## Have a bootstrap.ps1
+## Have a Bootstrap Script
 
 Help the next person install dependencies.
 
@@ -283,7 +283,7 @@ note: You really should always document the tools you use and the versions that 
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
 --
 
-## Keep your build.ps1
+## Keep Your Build.ps1
 
 Even when you write `Project.build.ps1`
 
@@ -297,19 +297,16 @@ note: People aren't that great about actually reading the README, and anything o
 ---
 
 # The FUTURE?
-
-note: There are some other people out there who built their own CI/CD systems.
-
 ## https://earthly.dev/
 
 CI based on BuildKit
 
 - Supports complex build graphs
 - Every pipeline runs in containers
-- Everything is cached and paralellized
+- Everything is cached and parallelized
 - Builds run the same, everywhere
 
-note: If things had turned out a little differently, I might be giving this talk about Earthly.dev. Earthly is a CI framework that's based on BuildKit. You can use it to run local builds on the edge (and trivially output to your working directory), but the builds always run in a container, so like the cloud, it's always clean, and it works the same for everyone. It caches and parallelizes agressively, so you might actually speed up your builds using it.
+note: If things had turned out a little differently, I might be giving this talk about Earthly.dev. Earthly is a CI framework that's based on BuildKit. You can use it to run local builds on the edge (whether you're outputting to your working directory, or generating container images), but the builds always run in a container, so like the cloud, it's always clean, and it works the same for everyone. It caches and parallelizes aggressively, so you might actually speed up your builds using it.
 
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
 
