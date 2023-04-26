@@ -11,7 +11,7 @@ fragments: true
 title: "#PSHSummit"
 ---
 
-# Invoke-Build {.r-fit-text}
+# Invoke-Build
 ## PowerShell in CI/CD
 ### Building, Testing, and Deploying
 
@@ -24,17 +24,28 @@ note: Welcome to my talk on Invoke-Build and using PowerShell in CI/CD -- I am J
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
 ---
 
-# About Me
+note: In case you don't know who I am, here's a little bit about me. I'm Joel Bennett, I'm from upstate New York by way of the grasslands of Guanacaste, Costa Rica. I have been "Jaykul" (pronounced J. Cool) online since the 1990s, and I'm currently the Principal DevOps Engineer at loanDepot! Let's see, what else... I am Bilingual, I am Battle Faction, I am blessed. I use He/Him pronouns. I am a 14 time Microsoft MVP, a Christian, an open source programmer, a ... really helpful guy. You can find me on GitHub (and from there, everywhere).
 
+
+# About Me
+note:
 - Joel "Jaykul" Bennett
 - Principal DevOps Engineer @ loanDepot
 - [PoshCode.org](https://PoshCode.org): [/discord](https://discord.gg/PowerShell), [/slack](https://poshcode.org/slack), [/irc](https://poshcode.org/irc)
 - [fosstodon.org/@jaykul](https://fosstodon.org/@jaykul) (and [Twitter](https://twitter.com/Jaykul))
 - [github.com/Jaykul](https://github.com/Jaykul) (also [PoshCode](https://github.com/PoshCode))
 
-note: In case you don't know who I am, here's a little bit about me. I'm Joel Bennett, I'm from upstate New York by way of the grasslands of Guanacaste, Costa Rica. I have been "Jaykul" (pronounced J. Cool) online since the 1990s, and I'm currently the Principal DevOps Engineer at loanDepot! Let's see, what else... I am Bilingual, I am Battle Faction, I am blessed. I use He/Him pronouns. I am a 14 time Microsoft MVP, a Christian, an open source programmer, a ... really helpful guy. You can find me on Discord, Mastodon, and Twitter (sometimes), as well as GitHub, and I'm always happy to talk about PowerShell, Programming, DevOps, silly origin stories, etc.<br/> But TODAY, I want to talk about CI/CD automation.
 
-<!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
+![About Me:An Image of my Github Profile](images/github.png)
+
+<!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat"
+-->
+--
+
+<!-- .slide: data-background="url(images/github.png) bottom 0px left 0px/100% 100% no-repeat" -->
+
+note:  You can find me on Discord, Mastodon, and Twitter (sometimes), as well as GitHub, and I'm always happy to talk about PowerShell, Programming, DevOps, silly origin stories, etc.<br/> But TODAY, I want to talk about CI/CD automation.
+
 ---
 
 # The Goal:
