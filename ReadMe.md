@@ -325,6 +325,6 @@ note: If things had turned out a little differently, I might be giving this talk
 
 # Thanks
 
-https://github.com/Jaykul/DevOps2023
+https://github.com/Jaykul/DevOps2023-Building
 
 <!-- .slide: data-background="url(images/ccbysa.png) bottom 10px left 200px/auto 80px no-repeat, url(images/summit.png) bottom 10px right 10px/auto 80px no-repeat, url(images/pshsummit.svg) bottom 10px left 65%/30% 80px no-repeat, url(images/background.jpg) bottom 0px left 0px/100% 100px no-repeat" -->
