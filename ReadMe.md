@@ -1,4 +1,6 @@
 ---
+title: "Invoke-Build: PowerShell in CI/CD"
+license: "CC-BY-SA 4.0"
 theme: simple
 highlightTheme: nnfx-dark # nnfx-light # foundation  # school-book #
 transition: convex
@@ -8,7 +10,6 @@ controlsLayout: edges
 progress: true
 showSlideNumber: speaker
 fragments: true
-title: "#PSHSummit"
 ---
 
 # Invoke-Build
